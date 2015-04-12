@@ -87,20 +87,16 @@ namespace hw2
 
         static void Main(string[] args)
         {
+           
+
+        }
+
+        private static int Part1()
+        {
             var graphFromFile = ReadGraph(@"C:\Users\Alex\Desktop\clustering1.txt");
 
             List<Node> graph = graphFromFile.Nodes;
             List<Edge> graphEdges = graphFromFile.Edges;
-
-            //var graph = new List<Node> { new Node(), new Node(), new Node(), new Node(), new Node(), new Node() };
-            //var graphEdges = new List<Edge> { 
-            //    new Edge { Node1 = 0, Node2 = 1, Cost = 1 },
-            //    new Edge { Node1 = 1, Node2 = 2, Cost = 1 },
-            //    new Edge { Node1 = 2, Node2 = 3, Cost = 3 },
-            //    new Edge { Node1 = 3, Node2 = 4, Cost = 2 },
-            //    new Edge { Node1 = 4, Node2 = 5, Cost = 2 },
-            //    new Edge { Node1 = 0, Node2 = 5, Cost = 4 },
-            //};
 
             int numberOfClusters = graph.Count;
             int k = 4; // desired max number of clusters
@@ -116,14 +112,13 @@ namespace hw2
                 Trace.WriteLine(pairOfDisjoinedPoints.Item3);
                 numberOfClusters--;
 
-//                var countOfDistinctLeaders = graph.GroupBy(n => n.Leader).Count();
+                //                var countOfDistinctLeaders = graph.GroupBy(n => n.Leader).Count();
 
                 if (numberOfClusters <= k)
                     break;
             }
 
-            var minDistanceBetweenDisjoinedItems = SearchForNextClosestDisjointPair(sortedEdgesForKraskal, graph).Item3.Cost;
-
+            return SearchForNextClosestDisjointPair(sortedEdgesForKraskal, graph).Item3.Cost;
         }
 
         private static void Join(Tuple<Node, Node, Edge> pairOfDisjoinedPoints, List<Node> graph)
