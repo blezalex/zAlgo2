@@ -36,13 +36,16 @@ namespace hw2
 
         public void Union(int item1, int item2)
         {
-            int smalerSetRoot = Find(item1);
-            int largerSetRoot = Find(item2);
+            int item1Root = Find(item1);
+            int item2Root = Find(item2);
 
-            if (ranks[smalerSetRoot] > ranks[largerSetRoot])
+            int smalerSetRoot = item1Root;
+            int largerSetRoot = item2Root;
+
+            if (ranks[item1Root] > ranks[item2Root])
             {
-                smalerSetRoot = item2;
-                largerSetRoot = item1;
+                smalerSetRoot = item2Root;
+                largerSetRoot = item1Root;
             }
 
             if (ranks[item1] == ranks[item2])

@@ -160,6 +160,12 @@ namespace hw2
 
         static void Main(string[] args)
         {
+            // var r = Part1();
+            Part2();
+        }
+
+        private static void Part2()
+        {
             Int32[] nodes = ReadBinaryGraph(@"C:\Users\Alex\Desktop\clustering_big.txt");
 
             Stopwatch sw = new Stopwatch();
@@ -272,73 +278,39 @@ namespace hw2
         {
             var graphFromFile = ReadGraph(@"C:\Users\Alex\Desktop\clustering1.txt");
 
-            List<Node> graph = graphFromFile.Nodes;
             List<Edge> graphEdges = graphFromFile.Edges;
+            var unionFind = new UnionFind(graphFromFile.Nodes.Count);
 
-            int numberOfClusters = graph.Count;
+            int numberOfClusters = graphFromFile.Nodes.Count;
             int k = 4; // desired max number of clusters
 
             var sortedEdgesForKraskal = graphEdges.OrderBy(e => e.Cost).GetEnumerator();
 
             while (numberOfClusters > k)
             {
-                var pairOfDisjoinedPoints = SearchForNextClosestDisjointPair(sortedEdgesForKraskal, graph);
+                var pairOfDisjoinedPoints = SearchForNextClosestDisjointPair(sortedEdgesForKraskal, unionFind);
 
-                Join(pairOfDisjoinedPoints, graph);
-
+                unionFind.Union(pairOfDisjoinedPoints.Item1, pairOfDisjoinedPoints.Item2);
                 numberOfClusters--;
-
-                // var countOfDistinctLeaders = graph.GroupBy(n => n.Leader).Count();
 
                 if (numberOfClusters <= k)
                     break;
             }
 
-            return SearchForNextClosestDisjointPair(sortedEdgesForKraskal, graph).Item3.Cost;
+            return SearchForNextClosestDisjointPair(sortedEdgesForKraskal, unionFind).Item3.Cost;
         }
 
-        private static void Join(Tuple<Node, Node, Edge> pairOfDisjoinedPoints, IList<Node> graph)
-        {
-            Node biggerSetNode;
-            Node smallerSetNode;
-            if (pairOfDisjoinedPoints.Item1.Leader.SetSize > pairOfDisjoinedPoints.Item2.Leader.SetSize)
-            {
-                biggerSetNode = pairOfDisjoinedPoints.Item1;
-                smallerSetNode = pairOfDisjoinedPoints.Item2;
-            }
-            else
-            {
-                biggerSetNode = pairOfDisjoinedPoints.Item2;
-                smallerSetNode = pairOfDisjoinedPoints.Item1;
-            }
-
-            // TODO: improve merging code
-            Node leaderToReplace = smallerSetNode.Leader;
-            
-            foreach (var node in graph)
-            {
-                if (node.Leader == leaderToReplace)
-                {
-                    node.Leader = biggerSetNode.Leader;
-                    biggerSetNode.Leader.SetSize++;
-                }
-            }
-
-          //  var actualClusterSize = graph.Count(n => n.Leader == biggerSetNode.Leader);
-        }
-
-        private static Tuple<Node, Node, Edge> SearchForNextClosestDisjointPair(IEnumerator<Edge> sortedEdgesForKraskal, List<Node> graph)
+        private static Tuple<int, int, Edge> SearchForNextClosestDisjointPair(IEnumerator<Edge> sortedEdgesForKraskal, UnionFind clusters)
         {
             while (sortedEdgesForKraskal.MoveNext())
             {
                 var currentEdge = sortedEdgesForKraskal.Current;
 
-                var node1 = graph[currentEdge.Node1];
-                var node2 = graph[currentEdge.Node2];
-
-                if (node1.Leader != node2.Leader) // is in the different set?
+                var setId1 = clusters.Find(currentEdge.Node1);
+                var setId2 = clusters.Find(currentEdge.Node2);
+                if (setId1 != setId2) 
                 {
-                    return Tuple.Create(node1, node2, currentEdge);
+                    return Tuple.Create(setId1, setId2, currentEdge);
                 }
 
             }
