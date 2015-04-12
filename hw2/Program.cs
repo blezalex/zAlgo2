@@ -161,7 +161,10 @@ namespace hw2
         static void Main(string[] args)
         {
             Int32[] nodes = ReadBinaryGraph(@"C:\Users\Alex\Desktop\clustering_big.txt");
-            
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
             // ******** Generate masks ***** /
             var masks = new List<Int32>[maxSearchDistance + 1];
             for (var distance = 1; distance <= maxSearchDistance; distance++)
@@ -189,12 +192,7 @@ namespace hw2
                 nodeMap[node] = i;
             }
 
-            var graph = new Node[nodes.Length];
-            for (int i = 0; i < graph.Length; i++)
-            {
-                graph[i] = new Node();
-            }
-
+            var graph = new UnionFind(nodes.Length);
             var numberOfClusters = nodes.Length - duplicateCount;
 
             while (true)
@@ -204,13 +202,14 @@ namespace hw2
                 if (pairOfDisjoinedPoints == null)
                     break; // no more close nodes found at maxDist
 
-                Join(pairOfDisjoinedPoints, graph);
+                graph.Union(pairOfDisjoinedPoints.Item1, pairOfDisjoinedPoints.Item2);
 
                 numberOfClusters--;
             }
 
             Console.WriteLine(numberOfClusters);
             Console.WriteLine(dupCnt);
+            Console.WriteLine(sw.Elapsed);
         }
 
 
@@ -222,9 +221,8 @@ namespace hw2
 
         static int[] edgesCnt = new Int32[maxSearchDistance + 1];
 
-        private static Tuple<Node, Node, Edge> SearchForNextClosestDisjointPairImplicit(Int32[] nodeMap, IList<List<int>> masks, IList<Int32> nodes, IList<Node> graph)
+        private static Tuple<int, int> SearchForNextClosestDisjointPairImplicit(Int32[] nodeMap, IList<List<int>> masks, IList<Int32> nodes, UnionFind graph)
         {
-            
             while (currentDistance <= maxSearchDistance)
             {
                 while (currentNodeIdx < nodes.Count)
@@ -242,13 +240,13 @@ namespace hw2
                                 var mappedNode = nodeMap[lookupKey];
                                 if (mappedNode != NoNode) // such node exist
                                 {
-                                    var node1 = graph[currentNodeIdx];
-                                    var node2 = graph[mappedNode];
+                                    var setId1 = graph.Find(currentNodeIdx);
+                                    var setId2 = graph.Find(mappedNode);
 
-                                    if (node1.Leader != node2.Leader) // is in the different set?
+                                    if (setId1 != setId2) // is in the different set?
                                     {
                                         edgesCnt[currentDistance]++;
-                                        return Tuple.Create<Node, Node, Edge>(node1, node2, null);
+                                        return Tuple.Create<int, int>(setId1, setId2);
                                     }
                                 }
                             }
