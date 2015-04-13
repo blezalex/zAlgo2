@@ -122,13 +122,10 @@ namespace hw2
             }            
         }
 
-
-        
-
-        static List<Int32> GenerateMasks(int distance, int bits)
+        static Int32[] GenerateMasks(int distance, int bits)
         {
             if (distance == 0)
-                return new List<Int32> {0};
+                return new []{0};
 
             List<Int32> masks = new List<Int32>();
 
@@ -151,7 +148,7 @@ namespace hw2
             }
             
 
-            return masks;
+            return masks.ToArray();
         }
 
         const int bits = 24;
@@ -160,7 +157,7 @@ namespace hw2
 
         static void Main(string[] args)
         {
-            // var r = Part1();
+             var r = Part1();
             Part2();
         }
 
@@ -172,13 +169,13 @@ namespace hw2
             sw.Start();
 
             // ******** Generate masks ***** /
-            var masks = new List<Int32>[maxSearchDistance + 1];
+            var masks = new Int32[maxSearchDistance + 1][];
             for (var distance = 1; distance <= maxSearchDistance; distance++)
             {
                 masks[distance] = GenerateMasks(distance, bits);
             }
 
-
+           
             // ******** Generate map ******* /
             var nodeMapLen = nodes.Max() + 1;
             int duplicateCount = 0;
@@ -227,17 +224,18 @@ namespace hw2
 
         static int[] edgesCnt = new Int32[maxSearchDistance + 1];
 
-        private static Tuple<int, int> SearchForNextClosestDisjointPairImplicit(Int32[] nodeMap, IList<List<int>> masks, IList<Int32> nodes, UnionFind graph)
+        private static Tuple<int, int> SearchForNextClosestDisjointPairImplicit(int[] nodeMap, int[][] masks, int[] nodes, UnionFind graph)
         {
             while (currentDistance <= maxSearchDistance)
             {
-                while (currentNodeIdx < nodes.Count)
+                var masksForDistance = masks[currentDistance];
+                while (currentNodeIdx < nodes.Length)
                 {
                     if (nodeMap[nodes[currentNodeIdx]] == currentNodeIdx) // otherwise dup and should be skipped
                     {
-                        while (currentMaskIdx < masks[currentDistance].Count)
+                        while (currentMaskIdx < masksForDistance.Length)
                         {
-                            var mask = masks[currentDistance][currentMaskIdx++];
+                            var mask = masksForDistance[currentMaskIdx++];
 
                             var lookupKey = nodes[currentNodeIdx] ^ mask;
 

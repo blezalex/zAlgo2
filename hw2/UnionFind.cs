@@ -26,9 +26,10 @@ namespace hw2
         public int Find(int target)
         {
             int lookupElement = target;
+
             while (items[lookupElement] != lookupElement) // while not at the root
             {
-                lookupElement = items[lookupElement];
+                lookupElement = items[lookupElement] = items[items[lookupElement]]; // path compression
             }
 
             return lookupElement;
