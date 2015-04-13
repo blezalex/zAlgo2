@@ -175,7 +175,7 @@ namespace hw2
                 masks[distance] = GenerateMasks(distance, bits);
             }
 
-           
+            
             // ******** Generate map ******* /
             var nodeMapLen = nodes.Max() + 1;
             int duplicateCount = 0;
@@ -211,7 +211,6 @@ namespace hw2
             }
 
             Console.WriteLine(numberOfClusters);
-            Console.WriteLine(dupCnt);
             Console.WriteLine(sw.Elapsed);
         }
 
@@ -219,8 +218,6 @@ namespace hw2
         static int currentDistance = 1;
         static int currentNodeIdx = 0;
         static int currentMaskIdx = 0;
-
-        static int dupCnt = 0;
 
         static int[] edgesCnt = new Int32[maxSearchDistance + 1];
 
@@ -231,13 +228,14 @@ namespace hw2
                 var masksForDistance = masks[currentDistance];
                 while (currentNodeIdx < nodes.Length)
                 {
-                    if (nodeMap[nodes[currentNodeIdx]] == currentNodeIdx) // otherwise dup and should be skipped
+                    var currentNode = nodes[currentNodeIdx];
+                    if (nodeMap[currentNode] == currentNodeIdx) // otherwise dup and should be skipped
                     {
                         while (currentMaskIdx < masksForDistance.Length)
                         {
                             var mask = masksForDistance[currentMaskIdx++];
 
-                            var lookupKey = nodes[currentNodeIdx] ^ mask;
+                            var lookupKey = currentNode ^ mask;
 
                             if (lookupKey < nodeMap.Length)
                             {
@@ -255,10 +253,6 @@ namespace hw2
                                 }
                             }
                         }
-                    }
-                    else
-                    {
-                        dupCnt++;
                     }
 
                     currentMaskIdx = 0;
