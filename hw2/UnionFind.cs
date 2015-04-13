@@ -43,13 +43,16 @@ namespace hw2
             int smalerSetRoot = item1Root;
             int largerSetRoot = item2Root;
 
-            if (ranks[item1Root] > ranks[item2Root])
+            int item1RootRank = ranks[item1Root];
+            int item2RootRank = ranks[item2Root];
+
+            if (item1RootRank > item2RootRank)
             {
                 smalerSetRoot = item2Root;
                 largerSetRoot = item1Root;
             }
 
-            if (ranks[item1] == ranks[item2])
+            if (item1RootRank == item2RootRank)
             {
                 ranks[largerSetRoot]++;
             }

@@ -174,7 +174,6 @@ namespace hw2
             {
                 masks[distance] = GenerateMasks(distance, bits);
             }
-
             
             // ******** Generate map ******* /
             var nodeMapLen = nodes.Max() + 1;
@@ -219,8 +218,6 @@ namespace hw2
         static int currentNodeIdx = 0;
         static int currentMaskIdx = 0;
 
-        static int[] edgesCnt = new Int32[maxSearchDistance + 1];
-
         private static Tuple<int, int> SearchForNextClosestDisjointPairImplicit(int[] nodeMap, int[][] masks, int[] nodes, UnionFind graph)
         {
             while (currentDistance <= maxSearchDistance)
@@ -247,7 +244,6 @@ namespace hw2
 
                                     if (setId1 != setId2) // is in the different set?
                                     {
-                                        edgesCnt[currentDistance]++;
                                         return Tuple.Create<int, int>(setId1, setId2);
                                     }
                                 }
