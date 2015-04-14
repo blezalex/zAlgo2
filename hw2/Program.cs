@@ -157,13 +157,13 @@ namespace hw2
 
         static void Main(string[] args)
         {
-             var r = Part1();
+            // var r = Part1();
             Part2();
         }
 
         private static void Part2()
         {
-            Int32[] nodes = ReadBinaryGraph(@"C:\Users\Alex\Desktop\clustering_big.txt");
+            Int32[] nodes = ReadBinaryGraph(@"C:\Users\Alex\Desktop\algo2\clustering_big.txt");
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -264,7 +264,7 @@ namespace hw2
 
         private static int Part1()
         {
-            var graphFromFile = ReadGraph(@"C:\Users\Alex\Desktop\clustering1.txt");
+            var graphFromFile = ReadGraph(@"C:\Users\Alex\Desktop\algo2\clustering1.txt");
 
             List<Edge> graphEdges = graphFromFile.Edges;
             var unionFind = new UnionFind(graphFromFile.Nodes.Count);
