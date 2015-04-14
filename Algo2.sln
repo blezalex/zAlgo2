@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hw2", "hw2\hw2.csproj", "{7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{6A1EAAD0-7708-4040-A083-57762BCAF61D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hw3", "hw3\hw3.csproj", "{A037DC9D-6295-476E-9187-BE9E2C52F47C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{6A1EAAD0-7708-4040-A083-57762BCAF61D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A1EAAD0-7708-4040-A083-57762BCAF61D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A1EAAD0-7708-4040-A083-57762BCAF61D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A037DC9D-6295-476E-9187-BE9E2C52F47C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A037DC9D-6295-476E-9187-BE9E2C52F47C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A037DC9D-6295-476E-9187-BE9E2C52F47C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A037DC9D-6295-476E-9187-BE9E2C52F47C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
