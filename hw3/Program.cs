@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -71,10 +72,16 @@ namespace hw3
         private static void Part2()
         {
             var problem = ReadKnapsackProblem(@"C:\Users\Alex\Desktop\algo2\knapsack_big.txt");
+
+            var sw = new Stopwatch();
+            sw.Start();
             int answer = KnapsackRecursive(problem.Item1, problem.Item1.Length, problem.Item2);
+            sw.Stop();
+
+            Console.WriteLine("{0} {1}", answer, sw.Elapsed);
         }
 
-        static Dictionary<string, int> cache = new Dictionary<string, int>();
+        static Dictionary<UInt64, int> cache = new Dictionary<UInt64, int>();
 
         private static int KnapsackRecursive(Item[] items, int subProblemSize, int sackSize)
         {
@@ -84,7 +91,7 @@ namespace hw3
             if (sackSize <= 0)
                 return 0;
 
-            var cacheKey = string.Format("{0}_{1}", subProblemSize, sackSize);
+            UInt64 cacheKey = ((UInt64)subProblemSize) << 32 | (UInt64)sackSize;
 
             int result;
             if (cache.TryGetValue(cacheKey, out result))
