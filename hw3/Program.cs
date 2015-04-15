@@ -59,9 +59,53 @@ namespace hw3
 
 		static void Main(string[] args)
 		{
-            var problem = ReadKnapsackProblem(@"C:\Users\Alex\Desktop\algo2\knapsack1.txt");
-			int answer = KnapsackNaive(problem.Item1, problem.Item2);
+            Part2();
 		}
+
+        private static void Part1()
+        {
+            var problem = ReadKnapsackProblem(@"C:\Users\Alex\Desktop\algo2\knapsack1.txt");
+            int answer = KnapsackNaive(problem.Item1, problem.Item2);
+        }
+
+        private static void Part2()
+        {
+            var problem = ReadKnapsackProblem(@"C:\Users\Alex\Desktop\algo2\knapsack_big.txt");
+            int answer = KnapsackRecursive(problem.Item1, problem.Item1.Length, problem.Item2);
+        }
+
+        static Dictionary<string, int> cache = new Dictionary<string, int>();
+
+        private static int KnapsackRecursive(Item[] items, int subProblemSize, int sackSize)
+        {
+            if (subProblemSize <= 0)
+                return 0;
+
+            if (sackSize <= 0)
+                return 0;
+
+            var cacheKey = string.Format("{0}_{1}", subProblemSize, sackSize);
+
+            int result;
+            if (cache.TryGetValue(cacheKey, out result))
+            {
+                return result;
+            }
+
+            int valueNotTakingCurrentItem = KnapsackRecursive(items, subProblemSize - 1, sackSize);
+            int valueTakingCurrentItem = 0;
+            int weightLeftAfterTakingCurrentItem = sackSize - items[subProblemSize - 1].Weight;
+
+            if (weightLeftAfterTakingCurrentItem >= 0)
+            {
+                valueTakingCurrentItem = items[subProblemSize - 1].Value + KnapsackRecursive(items, subProblemSize - 1, weightLeftAfterTakingCurrentItem);
+            }
+
+            result = Math.Max(valueNotTakingCurrentItem, valueTakingCurrentItem);
+            cache[cacheKey] = result;
+
+            return result;
+        }
 
 		private static int KnapsackNaive(Item[] problem, int sackSize)
 		{
