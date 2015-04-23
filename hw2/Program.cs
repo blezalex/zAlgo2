@@ -5,86 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GraphLib;
 
 namespace hw2
 {
-    class Edge
-    {
-        public int Node1;
-        public int Node2;
-        public int Cost;
-
-        public override string ToString()
-        {
-            return string.Format("{0} <--> {1} = {2}", Node1, Node2, Cost);
-        }
-    }
-
-    class Node
-    {
-        public List<Edge> Edges = new List<Edge>();
-
-        public Node Leader;
-
-        public int SetSize = 1; // value is valid only for leader
-
-        public Node()
-        {
-            Leader = this;
-        }
-
-        public override string ToString()
-        {
- 	         return base.ToString() + GetHashCode();
-        }
-    }
-
-    class Graph
-    {
-        public List<Node> Nodes;
-        public List<Edge> Edges;
-    }
-
     class Program
     {
-        static Graph ReadGraph(string filename)
-        {
-            var nodes = new List<Node>();
-            var edges = new List<Edge>();
-
-            using (var sr = File.OpenText(filename))
-            {
-                var infoLine = sr.ReadLine();
-                var infoParts = infoLine.Split(' ');
-                int nodeCnt = int.Parse(infoParts[0]);
-
-                for (var i = 0; i < nodeCnt; i++)
-                {
-                    nodes.Add(new Node());
-                }
-
-
-                string line;
-                int edgeIdx = 0;
-                while ((line = sr.ReadLine()) != null)
-                {
-                    var parts = line.Split(' ');
-
-                    var edge = new Edge { Node1 = int.Parse(parts[0]) - 1, Node2 = int.Parse(parts[1]) - 1, Cost = int.Parse(parts[2]) };
-                    edges.Add(edge);
-                    edgeIdx++;
-
-                    nodes[edge.Node1].Edges.Add(edge);
-                    if (edge.Node1 != edge.Node2)
-                    {
-                        nodes[edge.Node2].Edges.Add(edge);
-                    }
-                }
-            }
-
-            return new Graph { Nodes = nodes, Edges = edges };
-        }
-
         static Int32[] ReadBinaryGraph(string filename)
         {
             using (var sr = File.OpenText(filename))
@@ -157,8 +83,8 @@ namespace hw2
 
         static void Main(string[] args)
         {
-            // var r = Part1();
-            Part2();
+            var r = Part1();
+            //Part2();
         }
 
         private static void Part2()
@@ -264,7 +190,7 @@ namespace hw2
 
         private static int Part1()
         {
-            var graphFromFile = ReadGraph(@"C:\Users\Alex\Desktop\algo2\clustering1.txt");
+            var graphFromFile = Graph.ReadFromFile(@"C:\Users\Alex\Desktop\algo2\clustering1.txt");
 
             List<Edge> graphEdges = graphFromFile.Edges;
             var unionFind = new UnionFind(graphFromFile.Nodes.Count);

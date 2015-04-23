@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GraphLib;
 
 namespace Algo2
 {
@@ -19,65 +20,9 @@ namespace Algo2
             Console.WriteLine(completionTimeSumRatio);
         }
 
-        class Edge
-        {
-            public int Node1;
-            public int Node2;
-            public int Cost;
-
-            public override string ToString()
-            {
-                return string.Format("{0} <--> {1} = {2}", Node1, Node2, Cost);
-            }
-        }
-
-        class Node
-        {
-            public List<Edge> Edges = new List<Edge>();
-        }
-
-        static List<Node> ReadGraph(string filename)
-        {
-            var nodes = new List<Node>();
-            var edges = new List<Edge>();
-
-            using (var sr = File.OpenText(filename))
-            {
-                var infoLine = sr.ReadLine();
-                var infoParts = infoLine.Split(' ');
-                int nodeCnt = int.Parse(infoParts[0]);
-                int edgeCnt = int.Parse(infoParts[1]);
-
-                for (var i = 0; i < nodeCnt; i++)
-                {
-                    nodes.Add(new Node());
-                }
-
-
-                string line;
-                int edgeIdx = 0;
-                while ((line = sr.ReadLine()) != null)
-                {
-                    var parts = line.Split(' ');
-
-                    var edge = new Edge { Node1 = int.Parse(parts[0]) - 1, Node2 = int.Parse(parts[1]) - 1, Cost = int.Parse(parts[2]) };
-                    edges.Add(edge);
-                    edgeIdx++;
-
-                    nodes[edge.Node1].Edges.Add(edge);
-                    if (edge.Node1 != edge.Node2)
-                    {
-                        nodes[edge.Node2].Edges.Add(edge);
-                    }
-                }
-            }
-
-            return nodes;
-        }
-
         static void Main(string[] args)
         {
-            var graph = ReadGraph(@"C:\Users\Alex\Desktop\edges.txt");
+            var graph = Graph.ReadFromFile(@"C:\Users\Alex\Desktop\algo2\edges.txt").Nodes;
 
             var msp = BuildMspNaive(graph);
 

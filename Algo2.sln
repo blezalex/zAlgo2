@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\Unit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hw3", "hw3\hw3.csproj", "{A037DC9D-6295-476E-9187-BE9E2C52F47C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hw4", "hw4\hw4.csproj", "{08994FDC-0599-4F14-BC05-4F0760CDCB4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphLib", "Graph\GraphLib.csproj", "{12A395BE-D220-48D9-884D-E0DCE782B82F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{A037DC9D-6295-476E-9187-BE9E2C52F47C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A037DC9D-6295-476E-9187-BE9E2C52F47C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A037DC9D-6295-476E-9187-BE9E2C52F47C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08994FDC-0599-4F14-BC05-4F0760CDCB4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08994FDC-0599-4F14-BC05-4F0760CDCB4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08994FDC-0599-4F14-BC05-4F0760CDCB4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08994FDC-0599-4F14-BC05-4F0760CDCB4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12A395BE-D220-48D9-884D-E0DCE782B82F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12A395BE-D220-48D9-884D-E0DCE782B82F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12A395BE-D220-48D9-884D-E0DCE782B82F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12A395BE-D220-48D9-884D-E0DCE782B82F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
