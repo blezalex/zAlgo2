@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GraphLib;
+using System.Diagnostics;
 
 namespace hw4
 {
@@ -11,10 +12,12 @@ namespace hw4
     {
         private static int[] BellmanFord(int sourceVertexIdx, Graph graph)
         {
-            var shortestPath = new int[graph.Nodes.Count, graph.Nodes.Count + 1];
-            InitWithInfiniteLength(shortestPath);
+            var shortestPathCurrent = new int[graph.Nodes.Count];
+            var shortestPathPrev = new int[graph.Nodes.Count];
 
-            shortestPath[sourceVertexIdx, 0] = 0; // path from source vertex to source vertes with length 0 is empty path with 0 cost
+            InitWithInfiniteLength(shortestPathPrev);
+
+            shortestPathPrev[sourceVertexIdx] = 0; // path from source vertex to source vertes with length 0 is empty path with 0 cost
 
             bool pathChanged = true;
             int maxPathLen;
@@ -32,24 +35,27 @@ namespace hw4
                             continue;
 
 
-                        var shortestPathToBeginingOfEdge = shortestPath[edge.Node1, maxPathLen - 1];
+                        var shortestPathToBeginingOfEdge = shortestPathPrev[edge.Node1];
                         if (shortestPathToBeginingOfEdge == int.MaxValue)
                             continue;
 
                         shortestPathUsingNewEdges = Math.Min(shortestPathUsingNewEdges, shortestPathToBeginingOfEdge + edge.Cost);
                     }
 
-                    var shortestPathNotUsingNewEdges = shortestPath[nodeId, maxPathLen - 1];
+                    var shortestPathNotUsingNewEdges = shortestPathPrev[nodeId];
                     int newShortestPath = Math.Min(shortestPathNotUsingNewEdges, shortestPathUsingNewEdges);
-                    if (!pathChanged && newShortestPath != shortestPath[nodeId, maxPathLen - 1])
+                    if (!pathChanged && newShortestPath != shortestPathPrev[nodeId])
                     {
                         pathChanged = true;
                     }
-                    shortestPath[nodeId, maxPathLen] = newShortestPath;
+
+                    shortestPathCurrent[nodeId] = newShortestPath;
                 }
 
                 if (!pathChanged)
                     break;
+
+                Swap(ref shortestPathCurrent, ref shortestPathPrev);
             }
 
             if (pathChanged) // if path changed at the last iteration then negative cycle exists
@@ -57,30 +63,32 @@ namespace hw4
                 throw new ArgumentException("Negative cycle is detected");
             }
 
-            var minPaths = new int[graph.Nodes.Count];
-            for (int nodeId = 0; nodeId < graph.Nodes.Count; nodeId++)
-            {
-                minPaths[nodeId] = shortestPath[nodeId, maxPathLen];
-            }
-
-            return minPaths;
+            return shortestPathCurrent;
         }
 
-        private static void InitWithInfiniteLength(int[,] shortestPath)
+        private static void Swap(ref int[] p1, ref int[] p2)
+        {
+            var tmp = p1;
+            p1 = p2;
+            p2 = tmp;
+        }
+
+        private static void InitWithInfiniteLength(int[] shortestPath)
         {
             for (int i = 0; i < shortestPath.GetLength(0); i++)
-            {
-                for (int j = 0; j < shortestPath.GetLength(1); j++)
-                {
-                    shortestPath[i, j] = int.MaxValue;
-                }
-            }
+                shortestPath[i] = int.MaxValue;
+            
         }
 
         static void Main(string[] args)
         {
             var graph = Graph.ReadFromFile(@"C:\Users\Alex\Desktop\algo2\g3.txt");
-
+            
+            var sw = new Stopwatch();  
+            // 29.2 sec for naive bf * n
+            // 16 sec bf * n    memory optimized
+            sw.Start();
+            
             var shortestPathInGraph = int.MaxValue;
             for (int nodeId = 0; nodeId < graph.Nodes.Count; nodeId++)
             {
@@ -90,7 +98,9 @@ namespace hw4
                 shortestPathInGraph = Math.Min(shortestPathInGraph, shortestPathFromCurrentStartNode);
             }
 
-            Console.WriteLine(shortestPathInGraph);
+            sw.Stop();
+
+            Console.WriteLine("{0} {1}", shortestPathInGraph, sw.Elapsed);
         }
     }
 }
