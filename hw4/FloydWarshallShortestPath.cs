@@ -15,11 +15,13 @@ namespace hw4
             var shortestPathsPrev = new int[graph.Nodes.Count, graph.Nodes.Count];
 
             Init0PathLengths(shortestPathsPrev, graph);
-            for (int maxAllowedNodeIdx = 0; maxAllowedNodeIdx < graph.Nodes.Count; maxAllowedNodeIdx++) // note here that 0 permits node with idx = 0
+
+            int nodeCnt = graph.Nodes.Count;
+            for (int maxAllowedNodeIdx = 0; maxAllowedNodeIdx < nodeCnt; maxAllowedNodeIdx++) // note here that 0 permits node with idx = 0
             {
-                for (int startNode = 0; startNode < graph.Nodes.Count; startNode++)
+                for (int startNode = 0; startNode < nodeCnt; startNode++)
                 {
-                    for (int endNode = 0; endNode < graph.Nodes.Count; endNode++)
+                    for (int endNode = 0; endNode < nodeCnt; endNode++)
                     {
                         var minPathLenUsingNewlyAllowedNode = int.MaxValue;
                         var shortestPathToK = shortestPathsPrev[startNode, maxAllowedNodeIdx];
