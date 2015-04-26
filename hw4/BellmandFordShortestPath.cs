@@ -30,8 +30,11 @@ namespace hw4
                 for (int nodeId = 0; nodeId < nodes.Length; nodeId++)
                 {
                     var shortestPathUsingNewEdges = int.MaxValue;
-                    foreach (var edge in nodes[nodeId].Edges)
+                    var node = nodes[nodeId];
+                    for (int edgeId = 0; edgeId < node.Edges.Count; edgeId++)
                     {
+                        var edge = node.Edges[edgeId];
+
                         if (edge.Node2 != nodeId) // ignore outgoing edges
                             continue;
 
