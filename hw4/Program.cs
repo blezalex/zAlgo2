@@ -46,7 +46,16 @@ namespace hw4
             return dummyNodeId;
         }
 
-        static void Main(string[] args)
+        static void Main()
+        {
+            var nodes = new List<Node>() { 
+                new Node(new Edge(0, 1, -1), new Edge(0, 2, -1), new Edge(2, 0, -1), new Edge(1, 0, -1)), 
+                new Node(new Edge(1, 2, -1), new Edge(2, 1, -1), new Edge(1, 0, -1), new Edge(0, 1, -1)), 
+                new Node(new Edge(2, 0, -1), new Edge(0, 2, -1), new Edge(1, 2, -1), new Edge(2, 1, -1)) };
+            var shortestPath = FloydWarshallShortestPath.Compute(nodes);
+        }
+
+        static void Main21(string[] args)
         {
             var graph = Graph.ReadFromFile(@"C:\Users\Alex\Desktop\algo2\g3.txt");
             
@@ -66,7 +75,7 @@ namespace hw4
 
         private static int CalcPathWithFloydWarshal(Graph graph)
         {
-            var shortestPath = FloydWarshallShortestPath.Compute(graph);
+            var shortestPath = FloydWarshallShortestPath.Compute(graph.Nodes);
 
             var shortestPathInGraph = int.MaxValue;
             for (int sourceNodeId = 0; sourceNodeId < graph.Nodes.Count; sourceNodeId++)

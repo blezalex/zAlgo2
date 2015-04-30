@@ -9,14 +9,14 @@ namespace hw4
 {
     class FloydWarshallShortestPath
     {
-        public static int[,] Compute(Graph graph)
+        public static int[,] Compute(IReadOnlyList<Node> nodes)
         {
-            var shortestPathsCurrent = new int[graph.Nodes.Count, graph.Nodes.Count];
-            var shortestPathsPrev = new int[graph.Nodes.Count, graph.Nodes.Count];
+            var shortestPathsCurrent = new int[nodes.Count, nodes.Count];
+            var shortestPathsPrev = new int[nodes.Count, nodes.Count];
 
-            Init0PathLengths(shortestPathsPrev, graph);
+            Init0PathLengths(shortestPathsPrev, nodes);
 
-            int nodeCnt = graph.Nodes.Count;
+            int nodeCnt = nodes.Count;
             for (int maxAllowedNodeIdx = 0; maxAllowedNodeIdx < nodeCnt; maxAllowedNodeIdx++) // note here that 0 permits node with idx = 0
             {
                 for (int startNode = 0; startNode < nodeCnt; startNode++)
@@ -48,7 +48,7 @@ namespace hw4
             p2 = tmp;
         }
 
-        private static void Init0PathLengths(int[,] shortestPath, Graph graph)
+        private static void Init0PathLengths(int[,] shortestPath, IReadOnlyList<Node> nodes)
         {
             for (int i = 0; i < shortestPath.GetLength(0); i++)
             {
@@ -61,7 +61,7 @@ namespace hw4
                     else
                     {
                         var directLinkMinLen = int.MaxValue;
-                        foreach (var edge in graph.Nodes[i].Edges)
+                        foreach (var edge in nodes[i].Edges)
                         {
                             if (edge.Node1 != i) // if not originate from current node - skip it
                                 continue;
