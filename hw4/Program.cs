@@ -17,12 +17,22 @@ namespace hw4
             var sw = new Stopwatch();
             sw.Start();
 
-            var shortestPathInGraph = int.MaxValue;
 
+            var nodeIdsToConsiderAsStartingPoint = new List<int>(); // in order to be the shortest outgoing edge must be negative
+            for (int nodeId = 0; nodeId < graph.Nodes.Count; nodeId++)
+            {
+                if (graph.Nodes[nodeId].Edges.Any(e => e.Cost < 0))
+                    nodeIdsToConsiderAsStartingPoint.Add(nodeId);
+            }
+
+
+            var shortestPathInGraph = int.MaxValue;
             var johnsonPathCalc = new JohnsonAllPairShortestPath(graph);
+            
+            var nodesWithNegativeEdges = graph.Nodes.Where(n => n.Edges.Any(e => e.Cost < 0));
 
             //for (int nodeId = 0; nodeId < graph.Nodes.Count - 1; nodeId++)
-            Parallel.For(0, graph.Nodes.Count - 1, nodeId =>
+            Parallel.ForEach(nodeIdsToConsiderAsStartingPoint, nodeId =>
             {
                 var shortestPath = johnsonPathCalc.Compute(nodeId);
                 var shortestPathFromCurrentStartNode = shortestPath.Min();
