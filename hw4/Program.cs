@@ -10,23 +10,28 @@ namespace hw4
 {
     class Program
     {
-        static void Main1(string[] args)
+        static void Main(string[] args)
         {
             var graph = Graph.ReadFromFile(@"C:\Users\Alex\Desktop\algo2\large.txt");
 
-            var dummyNodeId = AddDummyNode(graph);
-
             var sw = new Stopwatch();
+            sw.Start();
 
-            var shortestPath = BellmandFordShortestPath.Compute(dummyNodeId, graph);
-            // REweight
+            var shortestPathInGraph = int.MaxValue;
 
-            // Deijstra n times
+            var johnsonPathCalc = new JohnsonAllPairShortestPath(graph);
 
-            // fix path len
+            //for (int nodeId = 0; nodeId < graph.Nodes.Count - 1; nodeId++)
+            Parallel.For(0, graph.Nodes.Count - 1, nodeId =>
+            {
+                var shortestPath = johnsonPathCalc.Compute(nodeId);
+                var shortestPathFromCurrentStartNode = shortestPath.Min();
+
+                shortestPathInGraph = Math.Min(shortestPathInGraph, shortestPathFromCurrentStartNode);
+            });
 
             sw.Stop();
-            Console.WriteLine("{0} {1}", 0, sw.Elapsed);
+            Console.WriteLine("{0} {1}", shortestPathInGraph, sw.Elapsed);
         }
 
         private static int AddDummyNode(Graph graph)
@@ -46,15 +51,6 @@ namespace hw4
             return dummyNodeId;
         }
 
-        static void Main()
-        {
-            var nodes = new List<Node>() { 
-                new Node(new Edge(0, 1, -1), new Edge(0, 2, -1), new Edge(2, 0, -1), new Edge(1, 0, -1)), 
-                new Node(new Edge(1, 2, -1), new Edge(2, 1, -1), new Edge(1, 0, -1), new Edge(0, 1, -1)), 
-                new Node(new Edge(2, 0, -1), new Edge(0, 2, -1), new Edge(1, 2, -1), new Edge(2, 1, -1)) };
-            var shortestPath = FloydWarshallShortestPath.Compute(nodes);
-        }
-
         static void Main21(string[] args)
         {
             var graph = Graph.ReadFromFile(@"C:\Users\Alex\Desktop\algo2\g3.txt");
@@ -64,6 +60,7 @@ namespace hw4
             // 16 sec bf * n    memory optimized
             // 7.9 FW   memory optimized
             // 7.36 FW count optimized
+            // 1.24 Johnson
             sw.Start();
 
             var shortestPathInGraph = CalcPathWithNBF(graph);

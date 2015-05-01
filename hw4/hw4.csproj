@@ -39,7 +39,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BellmandFordShortestPath.cs" />
+    <Compile Include="DijkstraMinHeap.cs" />
+    <Compile Include="DijkstraShortestPath.cs" />
     <Compile Include="FloydWarshallShortestPath.cs" />
+    <Compile Include="JohnsonAllPairShortestPath.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
